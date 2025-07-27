@@ -60,18 +60,31 @@ int calculate(std::string s) {
         }
     }
     
-    // Now process remaining operators for addition or subtraction
-    int result = numbers.top();
-    numbers.pop();
-    while (!numbers.empty()) {
-        char op = operators.top();
-        operators.pop();
-        int num = numbers.top();
+    // Reverse the stacks to maintain left-to-right order
+    std::stack<int> numbersRev;
+    std::stack<int> operatorsRev;
+    while(!numbers.empty()) {
+        numbersRev.push(numbers.top());
         numbers.pop();
+    }
+
+    while(!operators.empty()) {
+        operatorsRev.push(operators.top());
+        operators.pop();
+    }
+
+    // Now process remaining operators for addition or subtraction
+    int result = numbersRev.top();
+    numbersRev.pop();
+    while (!numbersRev.empty()) {
+        char op = operatorsRev.top();
+        operatorsRev.pop();
+        int num = numbersRev.top();
+        numbersRev.pop();
         if (op == '+') {
             result += num;
         } else if (op == '-') {
-            result = num - result;
+            result -= num;
         }
     }
     
@@ -87,7 +100,7 @@ int main() {
 
 #### Complexity:
 - **Time Complexity:** O(n), where n is the length of the string, since we are iterating once through the input.
-- **Space Complexity:** O(n), due to the supplementary space used by two stacks.
+- **Space Complexity:** O(n), due to the supplementary space used by four stacks.
 
 ---
 
